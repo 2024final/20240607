@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>測驗</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.2/mammoth.browser.min.js"></script>
+    <style>
+        #output {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: left;
+            /* 將文字靠左對齊 */
+        }
+
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            /* 使用 flexbox 排列內容 */
+            justify-content: space-between;
+            /* 左右對齊 */
+            align-items: center;
+            /* 垂直居中 */
+        }
+
+        nav h2 a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            /* 使用 flexbox 排列連結 */
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        nav ul li a:hover {
+            color: rgb(239, 77, 77);
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .user-info {
+            margin: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #333;
+            color: #fff;
+        }
+
+        thead td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tbody td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            /* 添加外圍線條 */
+        }
+
+        .td_progress {
+            color: #ff0000;
+            /* 設定進度顏色 */
+        }
+
+        .td_testGrade {
+            color: #ff0000;
+            /* 設定測驗分數顏色 */
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #333;
+            min-width: 120px;
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: #fff;
+            padding: 5px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <h2><a href="index.html">物理學習管理系統</a></h2>
+        <ul>
+            <li class="dropdown">
+                <a href="#">課程學習 ▼</a>
+                <div class="dropdown-content">
+                    <a href="course1.html">認識路徑與位移課程</a>
+                    <a href="course2.html">平均路徑與平均位移課程</a>
+                    <a href="course3.html">平均加速度課程</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#">測驗 ▼</a>
+                <div class="dropdown-content">
+                    <a href="test1.html">認識路徑與位移測驗</a>
+                    <a href="test2.html">平均路徑與平均位移測驗</a>
+                    <a href="test3.html">平均加速度測驗</a>
+                </div>
+            </li>
+            <li id="profile-menu" class="dropdown" style="display: none;" onmouseover="showSubMenu()"
+                onmouseout="hideSubMenu()">
+                <a href="profile.html">個人檔案 ▼</a>
+                <ul id="user-options" class="dropdown-content">
+                    <li><a href="#" onclick="logout()">登出</a></li>
+                </ul>
+            </li>
+
+            <li id="login-menu">
+                <a href="register.html" onclick="login()">登入</a>
+            </li>
+        </ul>
+    </nav>
+    <!-- <h1>自动显示本地DOCX文档</h1> -->
+    <div id="output"></div>
+
+    <footer>
+        <p>&copy; 2024 物理學習管理系統</p>
+    </footer>
+
+
+    <script>
+        async function loadDocx(filename) {
+            try {
+                const response = await fetch(filename);
+                if (!response.ok) {
+                    throw new Error('文件未找到');
+                }
+                const arrayBuffer = await response.arrayBuffer();
+                const result = await mammoth.convertToHtml({ arrayBuffer: arrayBuffer });
+                document.getElementById('output').innerHTML = result.value;
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('output').textContent = '加载文件时出错';
+            }
+        }
+
+        window.onload = function () {
+            loadDocx('test1.docx'); // 在这里指定要显示的DOCX文件的文件名
+        }
+    </script>
+</body>
+
+</html>

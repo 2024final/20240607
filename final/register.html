@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase 使用者註冊與登入</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2 {
+            text-align: center;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <!-- 引入 Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.4.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.4.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore-compat.js"></script>
+
+
+    <script src="./js/firebase.js"></script>
+    <!-- Firebase 配置 -->
+
+</head>
+
+<body>
+    <div class="container">
+        <h1 id="welcome-title">歡迎註冊</h1>
+
+        <!-- 註冊表單 -->
+        <h2>註冊</h2>
+        <input type="text" id="reg-username" placeholder="使用者名稱">
+        <input type="password" id="reg-password" placeholder="密碼">
+        <button onclick="register()">註冊</button>
+
+        <!-- 登入表單 -->
+        <h2>登入</h2>
+        <input type="text" id="login-username" placeholder="使用者名稱">
+        <input type="password" id="login-password" placeholder="密碼">
+        <button onclick="login()">登入</button>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // 註冊函數
+        function register() {
+            var username = document.getElementById("reg-username").value;
+            var password = document.getElementById("reg-password").value;
+
+            firebase.auth().createUserWithEmailAndPassword(username + '@example.com', password)
+                .then((userCredential) => {
+                    alert("註冊成功！您現在可以登入了。");
+                    window.location.href = "index.html?username=" + username; // 導航到 index.html，並帶上使用者名稱
+                    var user = userCredential.user;
+                })
+                .catch((error) => {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    alert("註冊失敗：" + errorMessage);
+                });
+        }
+
+        // 登入函數
+        function login() {
+            var username = document.getElementById("login-username").value;
+            var password = document.getElementById("login-password").value;
+
+            firebase.auth().signInWithEmailAndPassword(username + '@example.com', password)
+                .then((userCredential) => {
+                    alert("登入成功！");
+                    window.location.href = "index.html?username=" + username; // 導航到 index.html，並帶上使用者名稱
+                    var user = userCredential.user;
+                })
+                .catch((error) => {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    alert("登入失敗：" + errorMessage);
+                });
+        }
+    </script>
+</body>
+
+</html>
